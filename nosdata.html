@@ -16,7 +16,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <link rel="stylesheet" href ="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
   <link rel="stylesheet" type="text/css" href="style.css" >
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -173,8 +173,19 @@ function fcall(n)
 
 
 <script type="text/javascript">
+var checkboxesId = ["L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9", "L10", "L11", "L12", "L13", "L14", "L15", "DN", "DH", "DEX", "DR", "F_", "FNF", "FF", "R_", "RC", "RB", "RB2", "RA", "RA2", "RS", "RP"];
+var checkboxesStateCache = null;
+function getCheckboxesState() {
+	let ret = {};
+	for (let v of checkboxesId) {
+		ret[v] = document.getElementById(v).checked;
+	}
+	return ret;
+}
+
 $("#filterform").submit(function(e) {
 	e.preventDefault();
+	checkboxesStateCache = getCheckboxesState();
 	var newtable = $('#querytable').DataTable().draw();
 });
 
@@ -182,100 +193,71 @@ $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
 	var rawLevel = $(data[0]), fc = data[3], score = data[2];
 	var level = rawLevel.find("b div").text();
 	var difficulty = rawLevel.find("font").attr("color");
+	var csc = checkboxesStateCache;
 	var alive = true;
 
-	var checkbox = document.getElementById("L1");
-	if(checkbox.checked==false&&level=="1")
+	if(!csc["L1"]&&level=="1")
 		alive = false;
-	checkbox = document.getElementById("L2");
-	if(checkbox.checked==false&&level=="2")
+	if(!csc["L2"]&&level=="2")
 		alive = false;
-	checkbox = document.getElementById("L3");
-	if(checkbox.checked==false&&level=="3")
+	if(!csc["L3"]&&level=="3")
 		alive = false;
-	checkbox = document.getElementById("L4");
-	if(checkbox.checked==false&&level=="4")
+	if(!csc["L4"]&&level=="4")
 		alive = false;
-	checkbox = document.getElementById("L5");
-	if(checkbox.checked==false&&level=="5")
+	if(!csc["L5"]&&level=="5")
 		alive = false;
-	checkbox = document.getElementById("L6");
-	if(checkbox.checked==false&&level=="6")
+	if(!csc["L6"]&&level=="6")
 		alive = false;
-	checkbox = document.getElementById("L7");
-	if(checkbox.checked==false&&level=="7")
+	if(!csc["L7"]&&level=="7")
 		alive = false;
-	checkbox = document.getElementById("L8");
-	if(checkbox.checked==false&&level=="8")
+	if(!csc["L8"]&&level=="8")
 		alive = false;
-	checkbox = document.getElementById("L9");
-	if(checkbox.checked==false&&level=="9")
+	if(!csc["L9"]&&level=="9")
 		alive = false;
-	checkbox = document.getElementById("L10");
-	if(checkbox.checked==false&&level=="10")
+	if(!csc["L10"]&&level=="10")
 		alive = false;
-	checkbox = document.getElementById("L11");
-	if(checkbox.checked==false&&level=="11")
+	if(!csc["L11"]&&level=="11")
 		alive = false;
-	checkbox = document.getElementById("L12");
-	if(checkbox.checked==false&&level=="12")
+	if(!csc["L12"]&&level=="12")
 		alive = false;
-	checkbox = document.getElementById("L13");
-	if(checkbox.checked==false&&level=="◇1")
+	if(!csc["L13"]&&level=="◇1")
 		alive = false;
-	checkbox = document.getElementById("L14");
-	if(checkbox.checked==false&&level=="◇2")
+	if(!csc["L14"]&&level=="◇2")
 		alive = false;
-	checkbox = document.getElementById("L15");
-	if(checkbox.checked==false&&level=="◇3")
+	if(!csc["L15"]&&level=="◇3")
 		alive = false;
 	
-	checkbox = document.getElementById("DN");
-	if(checkbox.checked==false&&difficulty=="green")
+	if(!csc["DN"]&&difficulty=="green")
 		alive = false;
-	checkbox = document.getElementById("DH");
-	if(checkbox.checked==false&&difficulty=="orange")
+	if(!csc["DH"]&&difficulty=="orange")
 		alive = false;
-	checkbox = document.getElementById("DEX");
-	if(checkbox.checked==false&&difficulty=="red")
+	if(!csc["DEX"]&&difficulty=="red")
 		alive = false;
-	checkbox = document.getElementById("DR");
-	if(checkbox.checked==false&&difficulty=="purple")
+	if(!csc["DR"]&&difficulty=="purple")
 		alive = false;
 	
-	checkbox = document.getElementById("F_");
-	if(checkbox.checked==false&&fc=="-")
+	if(!csc["F_"]&&fc=="-")
 		alive = false;
-	checkbox = document.getElementById("FNF");
-	if(checkbox.checked==false&&fc=="NF")
+	if(!csc["FNF"]&&fc=="NF")
 		alive = false;
-	checkbox = document.getElementById("FF");
-	if(checkbox.checked==false&&(fc=="F"||fc=="F2"))
+	if(!csc["FF"]&&(fc=="F"||fc=="F2"))
 		alive = false;
 	
-	checkbox = document.getElementById("R_");
-	if(checkbox.checked==false&&score<700000)
+	if(!csc["R_"]&&score<700000)
 		alive = false;
-	checkbox = document.getElementById("RC");
-	if(checkbox.checked==false&&score>=700000&&score<750000)
+	if(!csc["RC"]&&score>=700000&&score<750000)
 		alive = false;
-	checkbox = document.getElementById("RB");
-	if(checkbox.checked==false&&score>=750000&&score<800000)
+	if(!csc["RB"]&&score>=750000&&score<800000)
 		alive = false;
-	checkbox = document.getElementById("RB2");
-	if(checkbox.checked==false&&score>=800000&&score<850000)
+	if(!csc["RB2"]&&score>=800000&&score<850000)
 		alive = false;
-	checkbox = document.getElementById("RA");
-	if(checkbox.checked==false&&score>=850000&&score<900000)
+	if(!csc["RA"]&&score>=850000&&score<900000)
 		alive = false;
-	checkbox = document.getElementById("RA2");
-	if(checkbox.checked==false&&score>=900000&&score<950000)
+	if(!csc["RA2"]&&score>=900000&&score<950000)
 		alive = false;
-	checkbox = document.getElementById("RS");
-	if(checkbox.checked==false&&score>=950000&&score<1000000)
+	if(!csc["RS"]&&score>=950000&&score<1000000)
 		alive = false;
-	checkbox = document.getElementById("RP");
-	if(checkbox.checked==false&&score==1000000)
+	if(!csc["RP"]&&score==1000000)
 		alive = false;
 	
 	return alive;
@@ -330,6 +312,7 @@ $.fn.dataTable.ext.type.order['fc-pre'] = function ( d ) {
 }
 
 $(document).ready(function() {
+	checkboxesStateCache = getCheckboxesState();
     var newtable = $('#querytable').DataTable({"iDisplayLength": 25, "columnDefs": [{"type": "level", "targets": 0},{"type":"fc","targets":3}],"order": [[ 0, "desc"],[2, "desc"]]});
 	$('#querytable').show();
 } );
