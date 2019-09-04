@@ -1,0 +1,72 @@
+  @font-face {
+	font-family: myFirstFont;
+  src:url("./font2.ttf");
+  font-weight: normal;
+  font-style: normal;
+  }
+  
+  @font-face {
+  font-family: myFirstFont2;
+  src:url("./font.ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+  
+  body, div {
+	font-family: myFirstFont;
+  }
+  
+  table {
+	font-size : 0.8em;
+  }
+  .jumbotron {
+	background : rgba(0,0,0,0.0);
+  }
+  
+  img {
+	background-color:transparent;
+  }
+  
+  div.datatable-wide {
+    padding-left: 0;
+    padding-right: 0;
+}
+#canvas{
+  width: 100%;
+}
+  
+table.dataTable thead>tr>th.sorting_asc,
+table.dataTable thead>tr>th.sorting_desc,
+table.dataTable thead>tr>th.sorting,
+table.dataTable thead>tr>td.sorting_asc,
+table.dataTable thead>tr>td.sorting_desc,
+table.dataTable thead>tr>td.sorting {
+    padding-right: 8px;
+}
+ 
+th.sorting_asc::after,
+th.sorting_desc::after {
+   content:"" !important;
+}
+
+  .vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
+ 
+ #chart {
+  max-width: 650px;
+  margin: 35px auto;
+}
+
+.level {
+  font-weight: bolder;
+  text-align: center;
+}
+
+.short-data {
+  text-align: center;
+}

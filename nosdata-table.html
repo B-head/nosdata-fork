@@ -262,7 +262,22 @@
 
 			return alive;
 		});
-	</script>
+        
+        $.fn.dataTable.ext.type.order['fc-pre'] = function (d) {
+            switch (d) {
+                case '-': return 0;
+                case 'NF': return 1;
+                case 'F': return 2;
+            }
+            return -1;
+        }
+
+        $(document).ready(function () {
+            checkboxesStateCache = getCheckboxesState();
+            var newtable = $('#querytable').DataTable({ "iDisplayLength": 25, "columnDefs": [{ "type": "fc", "targets": 4 }], "order": [[1, "desc"], [3, "desc"]] });
+            $('#querytable').show();
+        });
+    </script>
 
 	<div class='datatable-wide'>
 		<table id='querytable' class='display compact' style='display: none'>
@@ -9452,25 +9467,4 @@
 			</tbody>
 		</table>
 	</div>
-
-	<script type="text/javascript">
-		$.fn.dataTable.ext.type.order['fc-pre'] = function (d) {
-			switch (d) {
-				case '-': return 0;
-				case 'NF': return 1;
-				case 'F': return 2;
-			}
-			return -1;
-		}
-
-		$(document).ready(function () {
-			checkboxesStateCache = getCheckboxesState();
-			var newtable = $('#querytable').DataTable({ "iDisplayLength": 25, "columnDefs": [{ "type": "fc", "targets": 4 }], "order": [[1, "desc"], [3, "desc"]] });
-			$('#querytable').show();
-		});
-	</script>
-
-
-
-
 </body>

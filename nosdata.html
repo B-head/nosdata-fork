@@ -18,10 +18,10 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+	<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 </head>
 
 <body>
@@ -174,17 +174,17 @@
 	<br>
 
 	<div class='datatable-wide'>
-		<table id='querytable' class='display compact' style='display: none'>
+		<table id='querytable' class='display compact' style='display:none; width:100%'>
 			<thead>
 				<tr>
-					<th style='text-align:center'></th>
-					<th style='text-align:center'></th>
-					<th style='text-align:center'>Title</th>
-					<th style='text-align:center'>Score</th>
-					<th style='text-align:center'>F</th>
-					<th style='text-align:center'>Note</th>
-					<th style='text-align:center'>Basic</th>
-					<th style='text-align:center'>Recital</th>
+					<th></th>
+					<th></th>
+					<th>Title</th>
+					<th>Score</th>
+					<th>F</th>
+					<th>Note</th>
+					<th>Basic</th>
+					<th>Recital</th>
 				</tr>
 			</thead>
 		</table>
@@ -278,20 +278,93 @@
 
 			return alive;
 		});
-		
-		$.fn.dataTable.ext.type.order['fc-pre'] = function (d) {
-			switch (d) {
-				case '-': return 0;
-				case 'NF': return 1;
-				case 'F': return 2;
-			}
-			return -1;
-		}
 
 		$(document).ready(function () {
 			checkboxesStateCache = getCheckboxesState();
-			var jsonData = JSON.parse(document.getElementById("json-data").textContent)
-			var newtable = $('#querytable').DataTable({ data: jsonData, "iDisplayLength": 25, "columnDefs": [{ "type": "fc", "targets": 4 }], "order": [[1, "desc"], [3, "desc"]] });
+			let jsonData = JSON.parse(document.getElementById("json-data").textContent)
+			let osDesc = [ "desc", "asc" ];
+			let option = {
+				data: jsonData,
+				autoWidth: false,
+				// scrollX: true, うまく動かない。
+				pageLength: 25, 
+				columns: [
+					{ 
+						name: "diff", visible: false,
+						render (data, type) {
+							if (type === "sort" || type === "type") {
+								switch (data) {
+									case "Normal": return 1;
+									case "Hard": return 2;
+									case "Expert": return 3;
+									case "Real": return 4;
+								}
+							}
+							else {
+								return data;
+							}
+						}
+					},
+					{ 
+						name: "level", className: "level", width: "2ex", orderSequence: osDesc, orderData: [1, 0],
+						render (data, type, row) {
+							if (type === "display") {
+								let color
+								switch (row[0]) {
+									case "Normal": color = "green"; break;
+									case "Hard": color = "orange"; break;
+									case "Expert": color = "red"; break;
+									case "Real": color = "purple"; break;
+								}
+								return `<font color="${color}">${data}</font>`;
+							}
+							else if (type === "sort" || type === "type") {
+								let mat = /◇(\d+)/.exec(data);
+								return mat ? Number(mat[1]) + 12 : data;
+							}
+							else {
+								return data;
+							}
+						} 
+					},
+					{ 
+						name: "title", width: "30%", 
+						render (data, type, row) {
+							if (type === "display") {
+								let id = /id=([^&]+)/.exec(location.search)[1];
+								let code = row[8];
+								let diff = row[0];
+								return `<a href="chart_detail.php?id=${id}&code=${code}&diff=${diff}">${data}</a>`;
+							}
+							else {
+								return data;
+							}
+						}
+					},
+					{ name: "score", className: "short-data", width: "7ex" },
+					{ 
+						name: "fc", className: "short-data", width: "2ex",
+						render (data, type) {
+							if (type === "sort" || type === "type") {
+								switch (data) {
+									case "-": return 1;
+									case "NF": return 2;
+									case "F": return 3;
+								}
+							}
+							else {
+								return data;
+							}
+						}
+					},
+					{ name: "note", className: "short-data", width: "4ex" },
+					{ name: "bgrade", className: "short-data", width: "6ex", orderSequence: osDesc },
+					{ name: "rgrade", className: "short-data", width: "6ex", orderSequence: osDesc },
+					{ name: "code", visible: false },
+				], 
+				order: [[1, "desc"]], 
+			}
+			let newtable = $('#querytable').DataTable(option);
 			$('#querytable').show();
 		});
 	</script>
